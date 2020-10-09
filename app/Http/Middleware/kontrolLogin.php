@@ -19,15 +19,15 @@ class kontrolLogin
         $path = $request->path();
         if($path != "/" && $path != "login" && $path != "logout" && $path != "register"){
             if($request->user()){
-                if(isset($_COOKIE['kid'])){
+                // if(isset($_COOKIE['kid'])){
 
-                    if($_COOKIE['kid'] != $request->user()->last_session || $request->user()->last_session == '') {
+                //     if($_COOKIE['kid'] != $request->user()->last_session || $request->user()->last_session == '') {
 
-                        return redirect('/kontrolLogout');
-                    }
-                }else{
-                    return redirect('/kontrolLogout');
-                }
+                //         return redirect('/kontrolLogout');
+                //     }
+                // }else{
+                //     return redirect('/kontrolLogout');
+                // }
             }
         }
         return $response;

@@ -59,40 +59,40 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
         <script src="/js/app.js"></script>
         <script>
-            let URL = 'http://localhost:3000';
-            let socket = io(URL);
-            let varsayilanData = {
-                kid: {{ Auth::user()->id }},
-                veriler: null
-            };
-            console.log(socket);
+            // let URL = 'http://localhost:3000';
+            // let socket = io(URL);
+            // let varsayilanData = {
+            //     kid: {{ Auth::user()->id }},
+            //     veriler: null
+            // };
+            // console.log(socket);
 
-            socket.on('degistiMi', function(data) {
-                data = pr(data);
-                console.log("DEĞİŞİKLİK VAR");
-                console.log(data);
-                if (data.veriler && data.veriler.tur === "SAYFA_YENILE") {
-                    location.reload();
-                }
-            });
+            // socket.on('degistiMi', function(data) {
+            //     data = pr(data);
+            //     console.log("DEĞİŞİKLİK VAR");
+            //     console.log(data);
+            //     if (data.veriler && data.veriler.tur === "SAYFA_YENILE") {
+            //         location.reload();
+            //     }
+            // });
 
-            function degisiklikYap() {
-                console.log("DEĞİŞİKLİK YAPILIYOR");
-                let veriler = varsayilanData;
-                veriler.veriler = {
-                    tur: "SAYFA_YENILE"
-                };
+            // function degisiklikYap() {
+            //     console.log("DEĞİŞİKLİK YAPILIYOR");
+            //     let veriler = varsayilanData;
+            //     veriler.veriler = {
+            //         tur: "SAYFA_YENILE"
+            //     };
 
-                socket.emit("degistir", st(veriler))
-            }
+            //     socket.emit("degistir", st(veriler))
+            // }
 
-            function st(data) {
-                return typeof data === "string" ? data : JSON.stringify(data);
-            }
+            // function st(data) {
+            //     return typeof data === "string" ? data : JSON.stringify(data);
+            // }
 
-            function pr(data) {
-                return JSON.parse(data);
-            }
+            // function pr(data) {
+            //     return JSON.parse(data);
+            // }
         </script>
         @yield('js')
 
