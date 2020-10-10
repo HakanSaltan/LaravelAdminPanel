@@ -6,15 +6,32 @@
                 <th v-for="(baslik, baslik_index) in basliklar" :key="baslik.id + baslik_index">{{ baslik.ad }}</th>
             </tr>
             <tr v-for="(veri, veri_index) in veriler" :key="veri_index">
-                <td v-for="(yapi, yapi_index) in basliklar" :key="yapi.id + yapi_index">{{ veri[yapi.id] }}</td>
+                <td v-for="(baslik, baslik_index) in basliklar" :key="baslik.id + baslik_index + veri_index">
+                    <div v-if="duzenlemeObjesi[baslik.id + baslik_index + veri_index] && duzenlemeObjesi[baslik.id + baslik_index + veri_index].acik" key="acik">
+                        <input
+                            type="text"
+                            v-model="duzenlemeObjesi[baslik.id + baslik_index + veri_index].model"
+                            @blur="kaydet({ tekil: true, id: baslik.id, veri_index, key: baslik.id + baslik_index + veri_index })"
+                            @keyup.enter="kaydet({ tekil: true, id: baslik.id, veri_index, key: baslik.id + baslik_index + veri_index })"
+                            autofocus
+                        />
+                    </div>
+                    <div
+                        v-else
+                        @dblclick.stop="duzenlemeAc(baslik.id + baslik_index + veri_index, veri[baslik.id])"
+                        key="kapali"
+                    >
+                        {{ veri[baslik.id] }}
+                    </div>
+                </td>
             </tr>
         </table>
     </div>
 </template>
 
 <script>
-    import turSabitleri from "./TurSabitleri";
-    import get from "./utils";
+    import { turSabitleri } from "./TurSabitleri";
+    import { get, json, post } from "./utils";
 
     export default {
         props: {
@@ -37,10 +54,11 @@
                 datatable: null,
                 basliklar: [],
                 veriler: [],
+                duzenlemeObjesi: {},
             }
         },
         beforeMount() {
-            this.basliklar = this.sabitler.tablo.yapi;
+            this.basliklar = this.sabitler.tablo.basliklar;
             let gizlenecekler = this.sabitler.tablo.gizlenecekler;
             if (gizlenecekler.length > 0) {
                 gizlenecekler.forEach(ist => {
@@ -58,15 +76,57 @@
                     }
                 });
             }
+
+            this.verileriGetir();
         },
-        mounted() {
-            // console.log(turSabitleri);
-            this.veriler = this.verileriGetir();
-        },
+        mounted() {},
         methods: {
             verileriGetir() {
-                return get(this.tur);
-            }
+                return get(this.tur).then(donen => {
+                    this.veriler = donen.data.veriler;
+                });
+            },
+            kaydet(parametreler = {}) {
+                let gonderilecekVeriler = {};
+
+                // Eğer sadece bir alan çift tıklayarak düzeltildiyse
+                if (parametreler.tekil) {
+                    let { key, id, veri_index } = parametreler;
+
+                    // Eğer değerler aynıysa post atmadan eski haline döndürdük
+                    if (this.veriler[veri_index][id] === this.duzenlemeObjesi[key].model) {
+                        delete this.duzenlemeObjesi[key];
+                        this.duzenlemeObjesi = json(this.duzenlemeObjesi);
+                        return;
+                    }
+
+                    gonderilecekVeriler[id] = this.duzenlemeObjesi[key].model;
+
+                    gonderilecekVeriler[this.sabitler.tablo.birincilId] = this.veriler[veri_index][this.sabitler.tablo.birincilId];
+                    gonderilecekVeriler.birincilId = this.sabitler.tablo.birincilId;
+                }
+                else {
+                    gonderilecekVeriler = parametreler.veri;
+                }
+
+                return post(this.tur, gonderilecekVeriler).then(donen => {
+                    console.log("İŞLEM BAŞARILI");
+                    if (parametreler.tekil) {
+                        this.veriler[parametreler.veri_index][parametreler.id] = json(this.duzenlemeObjesi[parametreler.key].model);
+                        delete this.duzenlemeObjesi[parametreler.key];
+                        this.duzenlemeObjesi = json(this.duzenlemeObjesi);
+                    }
+                });
+            },
+
+            duzenlemeAc(key, veri) {
+                this.duzenlemeObjesi[key] = {
+                    acik: true,
+                    model: veri
+                };
+
+                this.duzenlemeObjesi = json(this.duzenlemeObjesi);
+            },
         },
     }
 </script>

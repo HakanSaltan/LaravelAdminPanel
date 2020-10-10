@@ -2728,6 +2728,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2745,17 +2762,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      sabitler: _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__["default"][this.tur],
+      sabitler: _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__["turSabitleri"][this.tur],
       gizlenecekler: this.gizle,
       datatable: null,
       basliklar: [],
-      veriler: []
+      veriler: [],
+      duzenlemeObjesi: {}
     };
   },
   beforeMount: function beforeMount() {
     var _this = this;
 
-    this.basliklar = this.sabitler.tablo.yapi;
+    this.basliklar = this.sabitler.tablo.basliklar;
     var gizlenecekler = this.sabitler.tablo.gizlenecekler;
 
     if (gizlenecekler.length > 0) {
@@ -2779,14 +2797,58 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+
+    this.verileriGetir();
   },
-  mounted: function mounted() {
-    // console.log(turSabitleri);
-    this.veriler = this.verileriGetir();
-  },
+  mounted: function mounted() {},
   methods: {
     verileriGetir: function verileriGetir() {
-      return Object(_utils__WEBPACK_IMPORTED_MODULE_1__["default"])(this.tur);
+      var _this2 = this;
+
+      return Object(_utils__WEBPACK_IMPORTED_MODULE_1__["get"])(this.tur).then(function (donen) {
+        _this2.veriler = donen.data.veriler;
+      });
+    },
+    kaydet: function kaydet() {
+      var _this3 = this;
+
+      var parametreler = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var gonderilecekVeriler = {}; // Eğer sadece bir alan çift tıklayarak düzeltildiyse
+
+      if (parametreler.tekil) {
+        var key = parametreler.key,
+            id = parametreler.id,
+            veri_index = parametreler.veri_index; // Eğer değerler aynıysa post atmadan eski haline döndürdük
+
+        if (this.veriler[veri_index][id] === this.duzenlemeObjesi[key].model) {
+          delete this.duzenlemeObjesi[key];
+          this.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(this.duzenlemeObjesi);
+          return;
+        }
+
+        gonderilecekVeriler[id] = this.duzenlemeObjesi[key].model;
+        gonderilecekVeriler[this.sabitler.tablo.birincilId] = this.veriler[veri_index][this.sabitler.tablo.birincilId];
+        gonderilecekVeriler.birincilId = this.sabitler.tablo.birincilId;
+      } else {
+        gonderilecekVeriler = parametreler.veri;
+      }
+
+      return Object(_utils__WEBPACK_IMPORTED_MODULE_1__["post"])(this.tur, gonderilecekVeriler).then(function (donen) {
+        console.log("İŞLEM BAŞARILI");
+
+        if (parametreler.tekil) {
+          _this3.veriler[parametreler.veri_index][parametreler.id] = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(_this3.duzenlemeObjesi[parametreler.key].model);
+          delete _this3.duzenlemeObjesi[parametreler.key];
+          _this3.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(_this3.duzenlemeObjesi);
+        }
+      });
+    },
+    duzenlemeAc: function duzenlemeAc(key, veri) {
+      this.duzenlemeObjesi[key] = {
+        acik: true,
+        model: veri
+      };
+      this.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(this.duzenlemeObjesi);
     }
   }
 });
@@ -39084,9 +39146,97 @@ var render = function() {
           return _c(
             "tr",
             { key: veri_index },
-            _vm._l(_vm.basliklar, function(yapi, yapi_index) {
-              return _c("td", { key: yapi.id + yapi_index }, [
-                _vm._v(_vm._s(veri[yapi.id]))
+            _vm._l(_vm.basliklar, function(baslik, baslik_index) {
+              return _c("td", { key: baslik.id + baslik_index + veri_index }, [
+                _vm.duzenlemeObjesi[baslik.id + baslik_index + veri_index] &&
+                _vm.duzenlemeObjesi[baslik.id + baslik_index + veri_index].acik
+                  ? _c("div", { key: "acik" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value:
+                              _vm.duzenlemeObjesi[
+                                baslik.id + baslik_index + veri_index
+                              ].model,
+                            expression:
+                              "duzenlemeObjesi[baslik.id + baslik_index + veri_index].model"
+                          }
+                        ],
+                        attrs: { type: "text", autofocus: "" },
+                        domProps: {
+                          value:
+                            _vm.duzenlemeObjesi[
+                              baslik.id + baslik_index + veri_index
+                            ].model
+                        },
+                        on: {
+                          blur: function($event) {
+                            return _vm.kaydet({
+                              tekil: true,
+                              id: baslik.id,
+                              veri_index: veri_index,
+                              key: baslik.id + baslik_index + veri_index
+                            })
+                          },
+                          keyup: function($event) {
+                            if (
+                              !$event.type.indexOf("key") &&
+                              _vm._k(
+                                $event.keyCode,
+                                "enter",
+                                13,
+                                $event.key,
+                                "Enter"
+                              )
+                            ) {
+                              return null
+                            }
+                            return _vm.kaydet({
+                              tekil: true,
+                              id: baslik.id,
+                              veri_index: veri_index,
+                              key: baslik.id + baslik_index + veri_index
+                            })
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.duzenlemeObjesi[
+                                baslik.id + baslik_index + veri_index
+                              ],
+                              "model",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  : _c(
+                      "div",
+                      {
+                        key: "kapali",
+                        on: {
+                          dblclick: function($event) {
+                            $event.stopPropagation()
+                            return _vm.duzenlemeAc(
+                              baslik.id + baslik_index + veri_index,
+                              veri[baslik.id]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(veri[baslik.id]) +
+                            "\n                "
+                        )
+                      ]
+                    )
               ])
             }),
             0
@@ -52009,10 +52159,7 @@ files.keys().map(function (key) {
   return Vue.component(key.split('/').pop().split('.')[0], files(key)["default"]);
 });
 var app = new Vue({
-  el: '#kg',
-  data: {
-    tur: "KULLANICI"
-  }
+  el: '#kg'
 });
 
 /***/ }),
@@ -52135,15 +52282,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************************!*\
   !*** ./resources/js/components/SuperDatatable.vue ***!
   \****************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SuperDatatable_vue_vue_type_template_id_4005c058_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SuperDatatable.vue?vue&type=template&id=4005c058&scoped=true& */ "./resources/js/components/SuperDatatable.vue?vue&type=template&id=4005c058&scoped=true&");
 /* harmony import */ var _SuperDatatable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SuperDatatable.vue?vue&type=script&lang=js& */ "./resources/js/components/SuperDatatable.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _SuperDatatable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _SuperDatatable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _SuperDatatable_vue_vue_type_style_index_0_id_4005c058_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SuperDatatable.vue?vue&type=style&index=0&id=4005c058&scoped=true&lang=css& */ "./resources/js/components/SuperDatatable.vue?vue&type=style&index=0&id=4005c058&scoped=true&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _SuperDatatable_vue_vue_type_style_index_0_id_4005c058_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SuperDatatable.vue?vue&type=style&index=0&id=4005c058&scoped=true&lang=css& */ "./resources/js/components/SuperDatatable.vue?vue&type=style&index=0&id=4005c058&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -52175,7 +52321,7 @@ component.options.__file = "resources/js/components/SuperDatatable.vue"
 /*!*****************************************************************************!*\
   !*** ./resources/js/components/SuperDatatable.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52292,53 +52438,53 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************!*\
   !*** ./resources/js/components/TurSabitleri.js ***!
   \*************************************************/
-/*! exports provided: default */
+/*! exports provided: turSabitleri */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "turSabitleri", function() { return turSabitleri; });
 var turSabitleri = {
   "KULLANICI": {
+    // Bileşenin başlık kısmında görünür
     ad: "Kullanıcılar",
     kod: "KULLANICI",
-    url: "/kullanici",
+    // Hangi URL'ye Post, Get, Delete vb. isteklerin atılacağını tutar
+    url: "/islem/kullanicilar",
     tablo: {
-      yapi: [{
-        id: "ad",
+      basliklar: [
+      /**
+       * id -> Veritabanındaki alan adı
+       * ad -> Tablo başlığında görünmesi gereken ad
+       */
+      {
+        id: "name",
         ad: "Ad"
       }, {
-        id: "soyad",
-        ad: "Soyad"
+        id: "email",
+        ad: "E-posta"
       }, {
         id: "islem",
         ad: "İşlemler"
       }],
-      gizlenecekler: []
-    }
-  },
-  "ARABA": {
-    ad: "Arabalar",
-    kod: "ARABA",
-    url: "/arabalar",
-    tablo: {
-      yapi: [{
-        id: "ad",
-        ad: "Ad"
-      }, {
-        id: "model",
-        ad: "Model"
-      }, {
-        id: "yil",
-        ad: "Yıl"
-      }, {
-        id: "islem",
-        ad: "İşlemler"
-      }],
-      gizlenecekler: []
+
+      /**
+       * Hangi başlığın gizleneceğini belirler
+       * Veritabanındaki alan adı (yani id) yazılması yeterli
+       * Örnek; ["name", "email"]
+       */
+      gizlenecekler: [],
+
+      /**
+       * Veritabanındaki benzersiz ID'yi temsil eder
+       * Güncelleme veya silme fonksiyonları için kullanılır
+       * Amaç dinamik yapı kurmak
+       */
+      birincilId: "id"
     }
   }
 };
-/* harmony default export */ __webpack_exports__["default"] = (turSabitleri);
+
 
 /***/ }),
 
@@ -52346,31 +52492,72 @@ var turSabitleri = {
 /*!******************************************!*\
   !*** ./resources/js/components/utils.js ***!
   \******************************************/
-/*! exports provided: default */
+/*! exports provided: get, json, hata, post */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "get", function() { return get; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "json", function() { return json; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hata", function() { return hata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "post", function() { return post; });
+/* harmony import */ var _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TurSabitleri */ "./resources/js/components/TurSabitleri.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+// function get(tur) {
+//     let turler = {
+//         "KULLANICI": [
+//             { ad: "Cihat", soyad: "ŞENGÜN" }
+//         ],
+//         "ARABA": [
+//             { ad: "Mercedes", model: "AMG", yil: 2012 },
+//             { ad: "Ford", model: "Fiesta", yil: 2004 },
+//         ]
+//     };
+//     return turler[tur];
+// }
+
+
+
 function get(tur) {
-  var turler = {
-    "KULLANICI": [{
-      ad: "Cihat",
-      soyad: "ŞENGÜN"
-    }],
-    "ARABA": [{
-      ad: "Mercedes",
-      model: "AMG",
-      yil: 2012
-    }, {
-      ad: "Ford",
-      model: "Fiesta",
-      yil: 2004
-    }]
-  };
-  return turler[tur];
+  var parametreler = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var sabitBilgi = _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__["turSabitleri"][tur];
+  var sorgu = axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(sabitBilgi.url, {
+    params: parametreler
+  });
+  sorgu.then(function (donen) {
+    if (!donen.data) hata("Data gelmedi");
+    if (!donen.data.sonuc) hata("Sonuç false");
+  })["catch"](function (e) {
+    console.log("HATA: ");
+    hata(e);
+  });
+  return sorgu;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (get);
+function post(tur) {
+  var parametreler = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var sabitBilgi = _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__["turSabitleri"][tur];
+  var sorgu = axios__WEBPACK_IMPORTED_MODULE_1___default.a.post(sabitBilgi.url, parametreler);
+  sorgu.then(function (donen) {
+    if (!donen.data) hata("Data gelmedi");
+    if (!donen.data.sonuc) hata("Sonuç false");
+  })["catch"](function (e) {
+    console.log("HATA: ");
+    hata(e);
+  });
+  return sorgu;
+}
+
+function hata(e) {
+  console.error(e);
+}
+
+function json(veri) {
+  return JSON.parse(JSON.stringify(veri));
+}
+
+
 
 /***/ }),
 

@@ -1,32 +1,36 @@
 const turSabitleri = {
     "KULLANICI": {
+        // Bileşenin başlık kısmında görünür
         ad: "Kullanıcılar",
         kod: "KULLANICI",
-        url: "/kullanici",
+        // Hangi URL'ye Post, Get, Delete vb. isteklerin atılacağını tutar
+        url: "/islem/kullanicilar",
         tablo: {
-            yapi: [
-                { id: "ad", ad: "Ad" },
-                { id: "soyad", ad: "Soyad" },
+            basliklar: [
+                /**
+                 * id -> Veritabanındaki alan adı
+                 * ad -> Tablo başlığında görünmesi gereken ad
+                 */
+                { id: "name", ad: "Ad" },
+                { id: "email", ad: "E-posta" },
                 { id: "islem", ad: "İşlemler" },
             ],
-            gizlenecekler: []
-        }
-    },
-    "ARABA": {
-        ad: "Arabalar",
-        kod: "ARABA",
-        url: "/arabalar",
-        tablo: {
-            yapi: [
-                { id: "ad", ad: "Ad" },
-                { id: "model", ad: "Model" },
-                { id: "yil", ad: "Yıl" },
-                { id: "islem", ad: "İşlemler" },
-            ],
-            gizlenecekler: []
+            /**
+             * Hangi başlığın gizleneceğini belirler
+             * Veritabanındaki alan adı (yani id) yazılması yeterli
+             * Örnek; ["name", "email"]
+             */
+            gizlenecekler: [],
+            
+            /**
+             * Veritabanındaki benzersiz ID'yi temsil eder
+             * Güncelleme veya silme fonksiyonları için kullanılır
+             * Amaç dinamik yapı kurmak
+             */
+            birincilId: "id", 
         }
     },
 };
 
 
-export default turSabitleri;
+export { turSabitleri };

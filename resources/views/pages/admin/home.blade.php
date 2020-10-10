@@ -8,7 +8,7 @@ Admin Anasayfa
 
 
 <div class="row">
-    <super-datatable :tur="tur" :key="tur"></super-datatable>
+    <super-datatable tur="KULLANICI" key="KULLANICI"></super-datatable>
 </div>
 
 @endsection
