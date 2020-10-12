@@ -7,10 +7,8 @@ Admin Anasayfa
 @section('content')
 
 
-<div class="row">
     <super-datatable tur="KULLANICI" key="KULLANICI"></super-datatable>
-</div>
-
+    <super-datatable-yeni tur="KULLANICI" key="KULLANICI"></super-datatable-yeni>
 @endsection
 
 @section('js')
