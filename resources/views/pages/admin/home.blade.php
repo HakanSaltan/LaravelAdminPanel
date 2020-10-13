@@ -5,15 +5,12 @@
 Admin Anasayfa
 @endsection
 @section('content')
-
-
     <super-datatable tur="KULLANICI" key="KULLANICI"></super-datatable>
-    <super-datatable-yeni tur="KULLANICI" key="KULLANICI"></super-datatable-yeni>
 @endsection
 
 @section('js')
 
 @endsection
-@section('css')
+@section('styles')
 
 @endsection

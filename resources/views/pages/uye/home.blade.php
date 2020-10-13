@@ -1,9 +1,7 @@
 @extends('layout.default')
-@section('css')
+@section('styles')
 @endsection
-@section('baslik')
-Anasayfa
-@endsection
+
 
 @section('content')
 
