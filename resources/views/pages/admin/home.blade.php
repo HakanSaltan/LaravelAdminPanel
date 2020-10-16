@@ -8,7 +8,7 @@ Admin Anasayfa
 
 
 <div class="row">
-    <super-datatable tur="KULLANICI" key="KULLANICI"></super-datatable>
+    <super-datatable tur="KULLANICI" key="KULLANICI" :gizle="['email']"></super-datatable>
 </div>
 
 @endsection

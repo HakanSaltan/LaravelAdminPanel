@@ -3,7 +3,14 @@
         <h3>{{ sabitler.ad }}</h3>
         <table>
             <tr>
-                <th v-for="(baslik, baslik_index) in basliklar" :key="baslik.id + baslik_index">{{ baslik.ad }}</th>
+                <th
+                    v-for="(baslik, baslik_index) in basliklar"
+                    :key="baslik.id + baslik_index"
+                    draggable="true"
+                    @dragstart="tasimaBasladi"
+                >
+                    {{ baslik.ad }}
+                </th>
             </tr>
             <tr v-for="(veri, veri_index) in veriler" :key="veri_index">
                 <td v-for="(baslik, baslik_index) in basliklar" :key="baslik.id + baslik_index + veri_index">
@@ -58,6 +65,7 @@
             }
         },
         beforeMount() {
+            this.baslikSiralamasiAyarla();
             this.basliklar = this.sabitler.tablo.basliklar;
             let gizlenecekler = this.sabitler.tablo.gizlenecekler;
             if (gizlenecekler.length > 0) {
@@ -127,6 +135,35 @@
 
                 this.duzenlemeObjesi = json(this.duzenlemeObjesi);
             },
+            baslikSiralamasiAyarla() {
+                let basliklar = this.sabitler.tablo.basliklar;
+
+                // TODO Kullanıcının ayarJSON'u çekilecek
+                let ayarJSON = {
+                    tablo: {
+                        "KULLANICI": {
+                            siralama: "0,1,2"
+                        }
+                    }
+                };
+
+                if (!ayarJSON.tablo || !ayarJSON.tablo[this.tur] || !ayarJSON.tablo[this.tur].siralama)
+                    return;
+
+                let siralama = ayarJSON.tablo[this.tur].siralama.split(",");
+
+                let yeniSiralanmisDizi = {};
+                siralama.forEach((sira, i) => {
+                    yeniSiralanmisDizi[sira] = basliklar[i];
+                });
+
+                this.sabitler.tablo.basliklar = Object.values(yeniSiralanmisDizi);
+            },
+            tasimaBasladi(event) {
+                // TODO Başlıklar arası taşıma yapılacak
+                console.log(event);
+                event.dataTransfer.dropEffect = "move";
+            },
         },
     }
 </script>
@@ -149,5 +186,12 @@
     th {
         background-color: #4CAF50;
         color: white;
+        transition: background-color .3s, color .3s;
+    }
+
+    th:hover {
+        background-color: #9effa1;
+        color: rgb(49, 49, 49);
+        cursor: pointer;
     }
 </style>

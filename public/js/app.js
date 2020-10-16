@@ -2745,6 +2745,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2773,6 +2780,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     var _this = this;
 
+    this.baslikSiralamasiAyarla();
     this.basliklar = this.sabitler.tablo.basliklar;
     var gizlenecekler = this.sabitler.tablo.gizlenecekler;
 
@@ -2849,6 +2857,29 @@ __webpack_require__.r(__webpack_exports__);
         model: veri
       };
       this.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(this.duzenlemeObjesi);
+    },
+    baslikSiralamasiAyarla: function baslikSiralamasiAyarla() {
+      var basliklar = this.sabitler.tablo.basliklar; // TODO Kullanıcının ayarJSON'u çekilecek
+
+      var ayarJSON = {
+        tablo: {
+          "KULLANICI": {
+            siralama: "0,1,2"
+          }
+        }
+      };
+      if (!ayarJSON.tablo || !ayarJSON.tablo[this.tur] || !ayarJSON.tablo[this.tur].siralama) return;
+      var siralama = ayarJSON.tablo[this.tur].siralama.split(",");
+      var yeniSiralanmisDizi = {};
+      siralama.forEach(function (sira, i) {
+        yeniSiralanmisDizi[sira] = basliklar[i];
+      });
+      this.sabitler.tablo.basliklar = Object.values(yeniSiralanmisDizi);
+    },
+    tasimaBasladi: function tasimaBasladi(event) {
+      // TODO Başlıklar arası taşıma yapılacak
+      console.log(event);
+      event.dataTransfer.dropEffect = "move";
     }
   }
 });
@@ -7558,7 +7589,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\ntable[data-v-4005c058] {\n    border-collapse: collapse;\n    width: 100%;\n}\nth[data-v-4005c058], td[data-v-4005c058] {\n    text-align: left;\n    padding: 8px;\n}\ntr[data-v-4005c058]:nth-child(even) {\n    background-color: #f2f2f2\n}\nth[data-v-4005c058] {\n    background-color: #4CAF50;\n    color: white;\n}\n", ""]);
+exports.push([module.i, "\ntable[data-v-4005c058] {\n    border-collapse: collapse;\n    width: 100%;\n}\nth[data-v-4005c058], td[data-v-4005c058] {\n    text-align: left;\n    padding: 8px;\n}\ntr[data-v-4005c058]:nth-child(even) {\n    background-color: #f2f2f2\n}\nth[data-v-4005c058] {\n    background-color: #4CAF50;\n    color: white;\n    transition: background-color .3s, color .3s;\n}\nth[data-v-4005c058]:hover {\n    background-color: #9effa1;\n    color: rgb(49, 49, 49);\n    cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -39135,9 +39166,19 @@ var render = function() {
         _c(
           "tr",
           _vm._l(_vm.basliklar, function(baslik, baslik_index) {
-            return _c("th", { key: baslik.id + baslik_index }, [
-              _vm._v(_vm._s(baslik.ad))
-            ])
+            return _c(
+              "th",
+              {
+                key: baslik.id + baslik_index,
+                attrs: { draggable: "true" },
+                on: { dragstart: _vm.tasimaBasladi }
+              },
+              [
+                _vm._v(
+                  "\n                " + _vm._s(baslik.ad) + "\n            "
+                )
+              ]
+            )
           }),
           0
         ),
@@ -52579,8 +52620,8 @@ function json(veri) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\LaravelAdminPanel\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\LaravelAdminPanel\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! c:\xampp\htdocs\LaravelAdminPanel\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! c:\xampp\htdocs\LaravelAdminPanel\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
