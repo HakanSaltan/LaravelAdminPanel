@@ -2886,6 +2886,228 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SuperDatatableYeni.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SuperDatatableYeni.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TurSabitleri */ "./resources/js/components/TurSabitleri.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./resources/js/components/utils.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    tur: {
+      type: String,
+      required: true
+    },
+    gizle: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    }
+  },
+  data: function data() {
+    var _ref;
+
+    return _ref = {
+      loading: false,
+      loading2: true,
+      page: 1,
+      aranacakKelime: '',
+      aranacakSutun: 'name',
+      orderByColumn: 'created_at',
+      orderByType: 'DESC'
+    }, _defineProperty(_ref, "page", 1), _defineProperty(_ref, "sabitler", _TurSabitleri__WEBPACK_IMPORTED_MODULE_0__["turSabitleri"][this.tur]), _defineProperty(_ref, "gizlenecekler", this.gizle), _defineProperty(_ref, "datatable", null), _defineProperty(_ref, "basliklar", []), _defineProperty(_ref, "veriler", []), _defineProperty(_ref, "duzenlemeObjesi", {}), _ref;
+  },
+  beforeMount: function beforeMount() {
+    var _this = this;
+
+    this.basliklar = this.sabitler.tablo.basliklar;
+    var gizlenecekler = this.sabitler.tablo.gizlenecekler;
+
+    if (gizlenecekler.length > 0) {
+      gizlenecekler.forEach(function (ist) {
+        var index = _this.basliklar.findIndex(function (y) {
+          return y.id == ist;
+        });
+
+        if (index > -1) {
+          _this.basliklar.splice(index, 1);
+        }
+      });
+    } else if (this.gizlenecekler.length > 0) {
+      this.gizlenecekler.forEach(function (ist) {
+        var index = _this.basliklar.findIndex(function (y) {
+          return y.id == ist;
+        });
+
+        if (index > -1) {
+          _this.basliklar.splice(index, 1);
+        }
+      });
+    }
+
+    this.verileriGetir();
+  },
+  mounted: function mounted() {},
+  methods: {
+    verileriGetir: function verileriGetir() {
+      var _this2 = this;
+
+      return Object(_utils__WEBPACK_IMPORTED_MODULE_1__["get"])(this.tur).then(function (donen) {
+        _this2.veriler = donen.data.veriler;
+      });
+    },
+    kaydet: function kaydet() {
+      var _this3 = this;
+
+      var parametreler = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var gonderilecekVeriler = {}; // Eğer sadece bir alan çift tıklayarak düzeltildiyse
+
+      if (parametreler.tekil) {
+        var key = parametreler.key,
+            id = parametreler.id,
+            veri_index = parametreler.veri_index; // Eğer değerler aynıysa post atmadan eski haline döndürdük
+
+        if (this.veriler[veri_index][id] === this.duzenlemeObjesi[key].model) {
+          delete this.duzenlemeObjesi[key];
+          this.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(this.duzenlemeObjesi);
+          return;
+        }
+
+        gonderilecekVeriler[id] = this.duzenlemeObjesi[key].model;
+        gonderilecekVeriler[this.sabitler.tablo.birincilId] = this.veriler[veri_index][this.sabitler.tablo.birincilId];
+        gonderilecekVeriler.birincilId = this.sabitler.tablo.birincilId;
+      } else {
+        gonderilecekVeriler = parametreler.veri;
+      }
+
+      return Object(_utils__WEBPACK_IMPORTED_MODULE_1__["post"])(this.tur, gonderilecekVeriler).then(function (donen) {
+        console.log("İŞLEM BAŞARILI");
+
+        if (parametreler.tekil) {
+          _this3.veriler[parametreler.veri_index][parametreler.id] = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(_this3.duzenlemeObjesi[parametreler.key].model);
+          delete _this3.duzenlemeObjesi[parametreler.key];
+          _this3.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(_this3.duzenlemeObjesi);
+        }
+      });
+    },
+    duzenlemeAc: function duzenlemeAc(key, veri) {
+      this.duzenlemeObjesi[key] = {
+        acik: true,
+        model: veri
+      };
+      this.duzenlemeObjesi = Object(_utils__WEBPACK_IMPORTED_MODULE_1__["json"])(this.duzenlemeObjesi);
+    }
+  },
+  watch: {
+    page: {
+      handler: function handler(value) {
+        this.reload();
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Test.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Test.vue?vue&type=script&lang=js& ***!
@@ -39295,6 +39517,335 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SuperDatatableYeni.vue?vue&type=template&id=3de6d43b&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SuperDatatableYeni.vue?vue&type=template&id=3de6d43b& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "card card-custom card-stretch gutter-b" }, [
+    _c("div", { staticClass: "card-header border-0 pt-7" }, [
+      _c("div", { staticClass: "card-title align-items-start flex-column" }, [
+        _c(
+          "span",
+          {
+            staticClass: "card-label font-weight-bold font-size-h4 text-dark-75"
+          },
+          [_vm._v(_vm._s(_vm.sabitler.ad))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-toolbar" }, [
+        _c("ul", { staticClass: "nav nav-pills nav-pills-sm nav-dark" }, [
+          _c("li", { staticClass: "nav-item ml-0" }, [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "nav-link py-2 px-4 font-weight-bolder font-size-sm",
+                on: {
+                  click: function($event) {
+                    return _vm.sayfayaGit(_vm.gelenBilgi.current_page - 1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "flaticon2-fast-back" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item ml-0" }, [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "nav-link py-2 px-4 font-weight-bolder font-size-sm",
+                on: {
+                  click: function($event) {
+                    return _vm.sayfayaGit(_vm.gelenBilgi.current_page + 1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "flaticon2-fast-next" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item ml-0" }, [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "nav-link py-2 px-4 font-weight-bolder font-size-sm",
+                on: { click: _vm.aramaAc }
+              },
+              [_c("i", { staticClass: "flaticon-search" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item ml-0" }, [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "nav-link py-2 px-4 font-weight-bolder font-size-sm",
+                on: {
+                  click: function($event) {
+                    return _vm.sendInfo("yeni", "yeni")
+                  }
+                }
+              },
+              [_c("i", { staticClass: "flaticon-add" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item ml-0" }, [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "nav-link py-2 px-4 font-weight-bolder font-size-sm",
+                on: { click: _vm.reload }
+              },
+              [_c("i", { staticClass: "flaticon-refresh" })]
+            )
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body" }, [
+      _c("table", { staticClass: "table table-borderless mb-6" }, [
+        _c("thead", [
+          _c(
+            "tr",
+            _vm._l(_vm.basliklar, function(baslik, baslik_index) {
+              return _c("th", { key: baslik.id + baslik_index }, [
+                _vm._v(_vm._s(baslik.ad))
+              ])
+            }),
+            0
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.veriler, function(veri, veri_index) {
+            return _c(
+              "tr",
+              { key: veri_index },
+              _vm._l(_vm.basliklar, function(baslik, baslik_index) {
+                return _c(
+                  "td",
+                  { key: baslik.id + baslik_index + veri_index },
+                  [
+                    _vm.duzenlemeObjesi[
+                      baslik.id + baslik_index + veri_index
+                    ] &&
+                    _vm.duzenlemeObjesi[baslik.id + baslik_index + veri_index]
+                      .acik
+                      ? _c("div", { key: "acik" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value:
+                                  _vm.duzenlemeObjesi[
+                                    baslik.id + baslik_index + veri_index
+                                  ].model,
+                                expression:
+                                  "duzenlemeObjesi[baslik.id + baslik_index + veri_index].model"
+                              }
+                            ],
+                            attrs: { type: "text", autofocus: "" },
+                            domProps: {
+                              value:
+                                _vm.duzenlemeObjesi[
+                                  baslik.id + baslik_index + veri_index
+                                ].model
+                            },
+                            on: {
+                              blur: function($event) {
+                                return _vm.kaydet({
+                                  tekil: true,
+                                  id: baslik.id,
+                                  veri_index: veri_index,
+                                  key: baslik.id + baslik_index + veri_index
+                                })
+                              },
+                              keyup: function($event) {
+                                if (
+                                  !$event.type.indexOf("key") &&
+                                  _vm._k(
+                                    $event.keyCode,
+                                    "enter",
+                                    13,
+                                    $event.key,
+                                    "Enter"
+                                  )
+                                ) {
+                                  return null
+                                }
+                                return _vm.kaydet({
+                                  tekil: true,
+                                  id: baslik.id,
+                                  veri_index: veri_index,
+                                  key: baslik.id + baslik_index + veri_index
+                                })
+                              },
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.duzenlemeObjesi[
+                                    baslik.id + baslik_index + veri_index
+                                  ],
+                                  "model",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
+                      : _c(
+                          "div",
+                          {
+                            key: "kapali",
+                            on: {
+                              dblclick: function($event) {
+                                $event.stopPropagation()
+                                return _vm.duzenlemeAc(
+                                  baslik.id + baslik_index + veri_index,
+                                  veri[baslik.id]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(veri[baslik.id]) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                  ]
+                )
+              }),
+              0
+            )
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "d-flex justify-content-between align-items-center flex-wrap"
+        },
+        [
+          _c("div", { staticClass: "d-flex flex-wrap py-2 mr-3" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-icon btn-sm btn-light mr-2 my-1",
+                on: {
+                  click: function($event) {
+                    return _vm.sayfayaGit(1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "ki ki-bold-double-arrow-back icon-xs" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-icon btn-sm btn-light mr-2 my-1",
+                on: {
+                  click: function($event) {
+                    return _vm.sayfayaGit(_vm.veriler.current_page - 1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "ki ki-bold-arrow-back icon-xs" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-icon btn-sm btn-light mr-2 my-1",
+                on: {
+                  click: function($event) {
+                    return _vm.sayfayaGit(_vm.veriler.last_page)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "ki ki-bold-arrow-next icon-xs" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-icon btn-sm btn-light mr-2 my-1",
+                on: {
+                  click: function($event) {
+                    return _vm.sayfayaGit(_vm.veriler.current_page - 1)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "ki ki-bold-double-arrow-next icon-xs" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "d-flex align-items-center py-3" }, [
+            !_vm.loading2
+              ? _c("div", { staticClass: "d-flex align-items-center" }, [
+                  _c("div", { staticClass: "mr-2 text-muted" }, [
+                    _vm._v("Güncelleniyor...")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "spinner mr-10" })
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v("Toplam "),
+              _c("strong", {
+                domProps: { textContent: _vm._s(_vm.veriler.total) }
+              }),
+              _vm._v(" Kayıttan "),
+              _c("strong", {
+                domProps: {
+                  textContent: _vm._s(_vm.veriler.from + " - " + _vm.veriler.to)
+                }
+              }),
+              _vm._v("\n                    Arası Kayıt Gösteriliyor.")
+            ])
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Test.vue?vue&type=template&id=5f45227d&":
 /*!*******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Test.vue?vue&type=template&id=5f45227d& ***!
@@ -52158,6 +52709,7 @@ module.exports = function(module) {
 var map = {
 	"./components/ExampleComponent.vue": "./resources/js/components/ExampleComponent.vue",
 	"./components/SuperDatatable.vue": "./resources/js/components/SuperDatatable.vue",
+	"./components/SuperDatatableYeni.vue": "./resources/js/components/SuperDatatableYeni.vue",
 	"./components/Test.vue": "./resources/js/components/Test.vue"
 };
 
@@ -52406,6 +52958,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/SuperDatatableYeni.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/SuperDatatableYeni.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SuperDatatableYeni_vue_vue_type_template_id_3de6d43b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SuperDatatableYeni.vue?vue&type=template&id=3de6d43b& */ "./resources/js/components/SuperDatatableYeni.vue?vue&type=template&id=3de6d43b&");
+/* harmony import */ var _SuperDatatableYeni_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SuperDatatableYeni.vue?vue&type=script&lang=js& */ "./resources/js/components/SuperDatatableYeni.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SuperDatatableYeni_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SuperDatatableYeni_vue_vue_type_template_id_3de6d43b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SuperDatatableYeni_vue_vue_type_template_id_3de6d43b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SuperDatatableYeni.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SuperDatatableYeni.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/SuperDatatableYeni.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SuperDatatableYeni_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SuperDatatableYeni.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SuperDatatableYeni.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SuperDatatableYeni_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SuperDatatableYeni.vue?vue&type=template&id=3de6d43b&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/SuperDatatableYeni.vue?vue&type=template&id=3de6d43b& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SuperDatatableYeni_vue_vue_type_template_id_3de6d43b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SuperDatatableYeni.vue?vue&type=template&id=3de6d43b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SuperDatatableYeni.vue?vue&type=template&id=3de6d43b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SuperDatatableYeni_vue_vue_type_template_id_3de6d43b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SuperDatatableYeni_vue_vue_type_template_id_3de6d43b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Test.vue":
 /*!******************************************!*\
   !*** ./resources/js/components/Test.vue ***!
@@ -52522,6 +53143,44 @@ var turSabitleri = {
        * Amaç dinamik yapı kurmak
        */
       birincilId: "id"
+    }
+  },
+  "ARACLAR": {
+    // Bileşenin başlık kısmında görünür
+    ad: "Araçlar",
+    kod: "ARACLAR",
+    // Hangi URL'ye Post, Get, Delete vb. isteklerin atılacağını tutar
+    url: "/islem/araclar",
+    tablo: {
+      basliklar: [
+      /**
+       * id -> Veritabanındaki alan adı
+       * ad -> Tablo başlığında görünmesi gereken ad
+       */
+      {
+        id: "marka",
+        ad: "Marka"
+      }, {
+        id: "model",
+        ad: "Model"
+      }, {
+        id: "plaka",
+        ad: "Plaka"
+      }],
+
+      /**
+       * Hangi başlığın gizleneceğini belirler
+       * Veritabanındaki alan adı (yani id) yazılması yeterli
+       * Örnek; ["name", "email"]
+       */
+      gizlenecekler: [],
+
+      /**
+       * Veritabanındaki benzersiz ID'yi temsil eder
+       * Güncelleme veya silme fonksiyonları için kullanılır
+       * Amaç dinamik yapı kurmak
+       */
+      birincilId: "marka"
     }
   }
 };

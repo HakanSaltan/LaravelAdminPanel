@@ -9,7 +9,7 @@ Route::get('/kontrolLogout','NoAuthController@kontrolLogout');
 Route::POST('/kontrolLogin','NoAuthController@kontrolLogin');
 Route::get('/islem/kullanicilar', 'IslemGetController@kullanicilar');
 Route::post('/islem/kullanicilar', 'IslemPostController@kullanicilar');
-
+Route::get('/gorevler','HomeController@gorevler');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'role:super-admin'], function(){
     Route::get('/home', 'AdminGetController@index')->name('adminHome');

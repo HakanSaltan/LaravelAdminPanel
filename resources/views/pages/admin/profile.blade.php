@@ -96,6 +96,6 @@ Profil
 </script>
 
 @endsection
-@section('css')
+@section('styles')
 
 @endsection
