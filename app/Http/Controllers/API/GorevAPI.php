@@ -8,7 +8,7 @@ use App\Http\Resources\GorevResource;
 
 use App\Gorevler;
 
-class GorevController extends Controller
+class GorevAPI extends Controller
 {
     /**
      * Display a listing of the resource.

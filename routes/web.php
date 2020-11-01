@@ -27,5 +27,3 @@ Route::group(['prefix' => 'reload'], function(){
     Route::get('/admin/kullanicilar', 'AdminReloadController@kullanicilar');
 });
 
-// Quick search dummy route to display html elements in search dropdown (header search)
-Route::get('/quick-search', 'PagesController@quickSearch')->name('quick-search');
