@@ -9,3 +9,6 @@
 -Laravel API route yapısı<br>
 -Role ve Permission İşlemleri<br>
 -Component Yapısı<br>
+
+
+<!-- Security scan triggered at 2025-09-02 14:16:52 -->
